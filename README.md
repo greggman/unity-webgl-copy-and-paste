@@ -23,4 +23,21 @@ and uncomment this line
 // #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
 ```
 
+## Issues
+
+* Non Alphabetic characters
+
+  See [this thread](https://forum.unity.com/threads/japanese-hiragana-characters-dont-work-in-webgl.356097/). 
+  You apparently need to include the fonts in your Unity project.
+
+* Ctrl-A/⌘-A selects other HTML on the page
+
+  1. Make your own [WebGL template](https://docs.unity3d.com/Manual/webgl-templates.html) that doesn't have
+     anything to select. Maybe [this one](https://github.com/greggman/better-unity-webgl-template) though I
+     didn't try it.
+
+  2. Make your own [WebGL template](https://docs.unity3d.com/Manual/webgl-templates.html) and
+     use [`user-select: none;`](https://developer.mozilla.org/en-US/docs/Web/CSS/user-select) in your CSS
+     to make whatever parts of the page you want to prevent from being selected.
+
 ## License: BSD-3-Clause
