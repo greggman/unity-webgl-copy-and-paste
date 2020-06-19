@@ -42,12 +42,10 @@ mergeInto(LibraryManager.library, {
       if (!g.initialized) {
         window.addEventListener('copy', function(e) {
           e.preventDefault();
-          console.log('before msg');
           var isApple = /(Mac|iPhone|iPod|iPad)/i.test(window.navigator.platform);
           var keyCode = isApple ? '%c' : '^c';
           SendMessage(g.objectName, g.copyFuncName, keyCode);
           event.clipboardData.setData('text/plain', g.clipboardStr);
-          console.log('after msg:', g.clipboardStr);
         });
         window.addEventListener('paste', function(e) {
           var result = e.clipboardData.getData('text')
@@ -58,7 +56,6 @@ mergeInto(LibraryManager.library, {
     passCopyToBrowser: function(stringPtr) {
       var g = window.becauseUnityIsBadWithJavascript_webglCopyAndPaste;
       var str = Pointer_stringify(stringPtr);
-      console.log('unity sent:', str);
       g.clipboardStr = str;
     },
 });
