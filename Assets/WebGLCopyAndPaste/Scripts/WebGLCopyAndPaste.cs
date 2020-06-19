@@ -29,9 +29,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using System.Collections;
 using System.Runtime.InteropServices;
 
 // #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
@@ -41,17 +39,17 @@ public class WebGLCopyAndPasteAPI {
     #if UNITY_WEBGL
 
         [DllImport("__Internal")]
-        private static extern void initWebGLCopyAndPaste(string objectName, string copyCallbackFuncName, string pasteCallbackFuncName);
+        private static extern void initWebGLCopyAndPaste(string objectName, string cutCopyCallbackFuncName, string pasteCallbackFuncName);
         [DllImport("__Internal")]
         private static extern void passCopyToBrowser(string str);
 
     #endif
 
-    static public void Init(string objectName, string copyCallbackFuncName, string pasteCallbackFuncName)
+    static public void Init(string objectName, string cutCopyCallbackFuncName, string pasteCallbackFuncName)
     {
         #if UNITY_WEBGL
 
-            initWebGLCopyAndPaste(objectName, copyCallbackFuncName, pasteCallbackFuncName);
+            initWebGLCopyAndPaste(objectName, cutCopyCallbackFuncName, pasteCallbackFuncName);
 
         #endif
     }
@@ -74,8 +72,11 @@ public class WebGLCopyAndPaste : MonoBehaviour {
     }
   }
 
-  private void SendKey(string keyCode)
+  private void SendKey(string baseKey)
   {
+    string appleKey = "%" + baseKey;
+    string naturalKey = "^" + baseKey;
+
     var currentObj = EventSystem.current.currentSelectedGameObject;
     if (currentObj == null) {
       return;
@@ -83,7 +84,11 @@ public class WebGLCopyAndPaste : MonoBehaviour {
     {
       var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
       if (input != null) {
-        input.ProcessEvent(Event.KeyboardEvent(keyCode));
+        // I don't know what's going on here. The code in InputField
+        // is looking for ctrl-c but that fails on Mac Chrome/Firefox
+        input.ProcessEvent(Event.KeyboardEvent(naturalKey));
+        input.ProcessEvent(Event.KeyboardEvent(appleKey));
+        // so let's hope one of these is basically a noop
         return;
       }
     }
@@ -91,17 +96,20 @@ public class WebGLCopyAndPaste : MonoBehaviour {
     {
       var input = currentObj.GetComponent<TMPro.TMP_InputField>();
       if (input != null) {
-        input.ProcessEvent(Event.KeyboardEvent(keyCode));
+        // I don't know what's going on here. The code in InputField
+        // is looking for ctrl-c but that fails on Mac Chrome/Firefox
+        // so let's hope one of these is basically a noop
+        input.ProcessEvent(Event.KeyboardEvent(naturalKey));
+        input.ProcessEvent(Event.KeyboardEvent(appleKey));
         return;
       }
     }
     #endif
   }
 
-  public void GetClipboard(string keyCode)
+  public void GetClipboard(string key)
   {
-    SendKey(keyCode);
-
+    SendKey(key);
     WebGLCopyAndPasteAPI.PassCopyToBrowser(GUIUtility.systemCopyBuffer);
   }
 
