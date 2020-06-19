@@ -40,4 +40,16 @@ and uncomment this line
      use [`user-select: none;`](https://developer.mozilla.org/en-US/docs/Web/CSS/user-select) in your CSS
      to make whatever parts of the page you want to prevent from being selected.
 
+## ChangeList
+
+* 0.0.2
+
+  * Support cut
+
+  * Support Safari
+
+* 0.0.1
+
+  * Initial Release
+
 ## License: BSD-3-Clause
