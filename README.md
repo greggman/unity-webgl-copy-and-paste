@@ -23,6 +23,12 @@ and uncomment this line
 // #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
 ```
 
+## Alternatives
+
+This might be better?
+
+https://github.com/kou-yeung/WebGLInput
+
 ## Issues
 
 * Non Alphabetic characters
