@@ -3,7 +3,7 @@
 For some reason Unity decided not to support copy and paste in WebGL.
 Here is an attempt to add it back in. No promises that it's perfect 😅
 
-![screenshot](https://user-images.githubusercontent.com/234804/85100802-ff0bcf00-b23b-11ea-9030-24206085bd54.gif)
+![screenshot](https://user-images.githubusercontent.com/234804/85267132-caa04900-b4af-11ea-821f-921cb7f02f34.gif)
 
 At the moment there is only support for [`InputField`](https://docs.unity3d.com/2019.1/Documentation/Manual/script-InputField.html) and
 [`TMPro.TMP_InputField`](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/api/TMPro.TMP_InputField.html)
