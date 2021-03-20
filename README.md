@@ -14,9 +14,7 @@ Example: https://greggman.github.io/unity-webgl-copy-and-paste/
 
 1. Download and add in [this unity package](https://github.com/greggman/unity-webgl-copy-and-paste/releases/latest) into your project.
 
-2. Make a `GameObject` and add in the `WebGLCopyAndPaste` script.
-
-3. If you are using [`TMPro.TMP_InputField`](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/api/TMPro.TMP_InputField.html) then edit `Assets/WebGLCopyAndPaste/Scripts/WebGLCopyAndPaste.cs`
+2. If you are using [`TMPro.TMP_InputField`](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/api/TMPro.TMP_InputField.html) then edit `Assets/WebGLCopyAndPaste/Scripts/WebGLCopyAndPaste.cs`
 and uncomment this line
 
 ```
@@ -47,6 +45,14 @@ https://github.com/kou-yeung/WebGLInput
      to make whatever parts of the page you want to prevent from being selected.
 
 ## ChangeList
+
+* 0.1.0
+  
+  * Removed the need for MonoBehaviours
+  
+  * Replaced messages with proper callbacks
+
+  * Fixed data storing in `window`
 
 * 0.0.2
 
