@@ -69,7 +69,12 @@ var WebGLCopyAndPaste = {
         var bufferSize = lengthBytesUTF8(str) + 1;
         var buffer = _malloc(bufferSize);
         stringToUTF8(str, buffer, bufferSize);
-        Runtime.dynCall('vi', callback, [buffer]);
+        try {
+          Runtime.dynCall('vi', callback, [buffer]);
+        } catch(e) {
+          // block is triggered on >=2021.2
+          Module['dynCall_vi'](callback, buffer);
+        }
       }
 
       WebGLCopyAndPaste.data =
