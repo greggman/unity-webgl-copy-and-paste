@@ -69,7 +69,11 @@ var WebGLCopyAndPaste = {
         var bufferSize = lengthBytesUTF8(str) + 1;
         var buffer = _malloc(bufferSize);
         stringToUTF8(str, buffer, bufferSize);
-        Runtime.dynCall('vi', callback, [buffer]);
+        if (typeof Module !== undefined && Module.dynCall_vi) {
+          Module.dynCall_vi(callback, buffer);
+        } else {
+          Runtime.dynCall('vi', callback, [buffer]);
+        }
       }
 
       WebGLCopyAndPaste.data =
@@ -100,7 +104,8 @@ var WebGLCopyAndPaste = {
   },
 
   passCopyToBrowser: function (stringPtr) {
-    WebGLCopyAndPaste.data.clipboardStr = Pointer_stringify(stringPtr);
+    var fn = typeof UTF8ToString === 'function' ? UTF8ToString : Pointer_stringify;
+    WebGLCopyAndPaste.data.clipboardStr = fn(stringPtr);
   },
 };
 
