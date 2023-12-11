@@ -57,11 +57,16 @@ public class WebGLCopyAndPasteAPI
         }
     }
 
+    private static Event CreateKeyboardEventWithControlAndCommandKeysPressed(string baseKey)
+    {
+        var keyboardEvent = Event.KeyboardEvent(baseKey);
+        keyboardEvent.control = true;
+        keyboardEvent.command = true;
+        return keyboardEvent;
+    }
+
     private static void SendKey(string baseKey)
       {
-        string appleKey = "%" + baseKey;
-        string naturalKey = "^" + baseKey;
-
         var currentObj = EventSystem.current.currentSelectedGameObject;
         if (currentObj == null) {
           return;
@@ -69,11 +74,7 @@ public class WebGLCopyAndPasteAPI
         {
           var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
           if (input != null) {
-            // I don't know what's going on here. The code in InputField
-            // is looking for ctrl-c but that fails on Mac Chrome/Firefox
-            input.ProcessEvent(Event.KeyboardEvent(naturalKey));
-            input.ProcessEvent(Event.KeyboardEvent(appleKey));
-            // so let's hope one of these is basically a noop
+            input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
             return;
           }
         }
@@ -81,11 +82,7 @@ public class WebGLCopyAndPasteAPI
         {
           var input = currentObj.GetComponent<TMPro.TMP_InputField>();
           if (input != null) {
-            // I don't know what's going on here. The code in InputField
-            // is looking for ctrl-c but that fails on Mac Chrome/Firefox
-            // so let's hope one of these is basically a noop
-            input.ProcessEvent(Event.KeyboardEvent(naturalKey));
-            input.ProcessEvent(Event.KeyboardEvent(appleKey));
+            input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
             return;
           }
         }
