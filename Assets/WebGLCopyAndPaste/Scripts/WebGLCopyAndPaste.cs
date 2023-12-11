@@ -65,7 +65,7 @@ public class WebGLCopyAndPasteAPI
         return keyboardEvent;
     }
 
-    private static void SendKey(string baseKey)
+    private static void SendKey(string baseKey, bool forceLabelUpdate = false)
       {
         var currentObj = EventSystem.current.currentSelectedGameObject;
         if (currentObj == null) {
@@ -76,6 +76,8 @@ public class WebGLCopyAndPasteAPI
           var input = currentObj.GetComponent<TMPro.TMP_InputField>();
           if (input != null) {
             input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
+            if (forceLabelUpdate)
+                input.ForceLabelUpdate();
             return;
           }
         }
@@ -84,6 +86,8 @@ public class WebGLCopyAndPasteAPI
           var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
           if (input != null) {
             input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
+            if (forceLabelUpdate)
+                input.ForceLabelUpdate();
             return;
           }
         }
@@ -99,7 +103,21 @@ public class WebGLCopyAndPasteAPI
       [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
       private static void ReceivePaste(string str)
       {
+        // Assigning the text to "GUIUtility.systemCopyBuffer" causes it to be automatically pasted on some browsers on the next frame,
+        // but not on all (e.g. Firefox 120.0.1, Windows 10, Unity 2022.3.10).
+        // Using "SendKey" with the "v" key properly pastes the text on all tested browsers (in the current frame),
+        // but it needs "GUIUtility.systemCopyBuffer" to be set,
+        // and doing so would paste the text twice on browsers in which setting "GUIUtility.systemCopyBuffer" works.
+        // As a workaround, we set "GUIUtility.systemCopyBuffer", then call "SendKey", and then set "GUIUtility.systemCopyBuffer" to null;
+        // this prevents the paste that occurs on the next frame, and only the "SendKey" one is made.
+        // Confirmed to work on:
+        //  - Edge 120.0.2210.61 (Chromium) on Windows 10, Unity 2022.3.10.
+        //  - Firefox 120.0.1 on Windows 10, Unity 2022.3.10.
+        //  - Safari on macOS (unknown versions), Unity 2022.3.10.
+        //  - Chrome on macOS (unknown versions), Unity 2022.3.10.
         GUIUtility.systemCopyBuffer = str;
+        SendKey("v", true);
+        GUIUtility.systemCopyBuffer = null;
       }
 
 #endif
