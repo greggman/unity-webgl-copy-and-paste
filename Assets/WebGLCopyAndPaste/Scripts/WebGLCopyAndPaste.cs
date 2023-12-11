@@ -115,10 +115,11 @@ public class WebGLCopyAndPasteAPI
         // As a workaround, we set "GUIUtility.systemCopyBuffer", then call "SendKey", and then set "GUIUtility.systemCopyBuffer" to null;
         // this prevents the paste that occurs on the next frame, and only the "SendKey" one is made.
         // Confirmed to work on:
-        //  - Edge 120.0.2210.61 (Chromium) on Windows 10, Unity 2022.3.10.
-        //  - Firefox 120.0.1 on Windows 10, Unity 2022.3.10.
-        //  - Safari on macOS (unknown versions), Unity 2022.3.10.
-        //  - Chrome on macOS (unknown versions), Unity 2022.3.10.
+        //   - Edge 120.0.2210.61 (Chromium) on Windows 10, Unity 2022.3.10, 2021.3.25 and 2020.3.18.
+        //   - Firefox 120.0.1 on Windows 10, Unity 2022.3.10, 2021.3.25 and 2020.3.18.
+        //   - Safari 16.6 on macOS Ventura 13.6, Unity 2022.3.10.
+        //   - Chrome 118.0.5993.70 on macOS Ventura 13.6, Unity 2022.3.10.
+        //   - Firefox 120.0.1 on macOS Ventura 13.6, Unity 2022.3.10.
         GUIUtility.systemCopyBuffer = str;
         SendKey("v", true);
         GUIUtility.systemCopyBuffer = null;
