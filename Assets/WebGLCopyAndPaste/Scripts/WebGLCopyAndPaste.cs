@@ -71,13 +71,6 @@ public class WebGLCopyAndPasteAPI
         if (currentObj == null) {
           return;
         }
-        {
-          var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
-          if (input != null) {
-            input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
-            return;
-          }
-        }
 #if WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
         {
           var input = currentObj.GetComponent<TMPro.TMP_InputField>();
@@ -87,6 +80,13 @@ public class WebGLCopyAndPasteAPI
           }
         }
 #endif
+        {
+          var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
+          if (input != null) {
+            input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
+            return;
+          }
+        }
       }
 
       [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
