@@ -67,7 +67,11 @@ public class WebGLCopyAndPasteAPI
 
     private static void SendKey(string baseKey, bool forceLabelUpdate = false)
       {
-        var currentObj = EventSystem.current.currentSelectedGameObject;
+        var currentEventSystem = EventSystem.current;
+        if (currentEventSystem == null) {
+            return;
+        }
+        var currentObj = currentEventSystem.currentSelectedGameObject;
         if (currentObj == null) {
           return;
         }
