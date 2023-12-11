@@ -28,11 +28,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+// #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
-
-// #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
 
 public class WebGLCopyAndPasteAPI
 {
