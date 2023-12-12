@@ -28,11 +28,12 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
+// #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
-
-// #define WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
 
 public class WebGLCopyAndPasteAPI
 {
@@ -56,39 +57,44 @@ public class WebGLCopyAndPasteAPI
         }
     }
 
-    private static void SendKey(string baseKey)
-      {
-        string appleKey = "%" + baseKey;
-        string naturalKey = "^" + baseKey;
+    private static Event CreateKeyboardEventWithControlAndCommandKeysPressed(string baseKey)
+    {
+        var keyboardEvent = Event.KeyboardEvent(baseKey);
+        keyboardEvent.control = true;
+        keyboardEvent.command = true;
+        return keyboardEvent;
+    }
 
-        var currentObj = EventSystem.current.currentSelectedGameObject;
+    private static void SendKey(string baseKey, bool forceLabelUpdate = false)
+      {
+        var currentEventSystem = EventSystem.current;
+        if (currentEventSystem == null) {
+            return;
+        }
+        var currentObj = currentEventSystem.currentSelectedGameObject;
         if (currentObj == null) {
           return;
-        }
-        {
-          var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
-          if (input != null) {
-            // I don't know what's going on here. The code in InputField
-            // is looking for ctrl-c but that fails on Mac Chrome/Firefox
-            input.ProcessEvent(Event.KeyboardEvent(naturalKey));
-            input.ProcessEvent(Event.KeyboardEvent(appleKey));
-            // so let's hope one of these is basically a noop
-            return;
-          }
         }
 #if WEBGL_COPY_AND_PASTE_SUPPORT_TEXTMESH_PRO
         {
           var input = currentObj.GetComponent<TMPro.TMP_InputField>();
           if (input != null) {
-            // I don't know what's going on here. The code in InputField
-            // is looking for ctrl-c but that fails on Mac Chrome/Firefox
-            // so let's hope one of these is basically a noop
-            input.ProcessEvent(Event.KeyboardEvent(naturalKey));
-            input.ProcessEvent(Event.KeyboardEvent(appleKey));
+            input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
+            if (forceLabelUpdate)
+                input.ForceLabelUpdate();
             return;
           }
         }
 #endif
+        {
+          var input = currentObj.GetComponent<UnityEngine.UI.InputField>();
+          if (input != null) {
+            input.ProcessEvent(CreateKeyboardEventWithControlAndCommandKeysPressed(baseKey));
+            if (forceLabelUpdate)
+                input.ForceLabelUpdate();
+            return;
+          }
+        }
       }
 
       [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
@@ -101,7 +107,22 @@ public class WebGLCopyAndPasteAPI
       [AOT.MonoPInvokeCallback( typeof(StringCallback) )]
       private static void ReceivePaste(string str)
       {
+        // Assigning the text to "GUIUtility.systemCopyBuffer" causes it to be automatically pasted on some browsers on the next frame,
+        // but not on all (e.g. Firefox 120.0.1, Windows 10, Unity 2022.3.10).
+        // Using "SendKey" with the "v" key properly pastes the text on all tested browsers (in the current frame),
+        // but it needs "GUIUtility.systemCopyBuffer" to be set,
+        // and doing so would paste the text twice on browsers in which setting "GUIUtility.systemCopyBuffer" works.
+        // As a workaround, we set "GUIUtility.systemCopyBuffer", then call "SendKey", and then set "GUIUtility.systemCopyBuffer" to null;
+        // this prevents the paste that occurs on the next frame, and only the "SendKey" one is made.
+        // Confirmed to work on:
+        //   - Edge 120.0.2210.61 (Chromium) on Windows 10, Unity 2022.3.10, 2021.3.25 and 2020.3.18.
+        //   - Firefox 120.0.1 on Windows 10, Unity 2022.3.10, 2021.3.25 and 2020.3.18.
+        //   - Safari 16.6 on macOS Ventura 13.6, Unity 2022.3.10.
+        //   - Chrome 118.0.5993.70 on macOS Ventura 13.6, Unity 2022.3.10.
+        //   - Firefox 120.0.1 on macOS Ventura 13.6, Unity 2022.3.10.
         GUIUtility.systemCopyBuffer = str;
+        SendKey("v", true);
+        GUIUtility.systemCopyBuffer = null;
       }
 
 #endif

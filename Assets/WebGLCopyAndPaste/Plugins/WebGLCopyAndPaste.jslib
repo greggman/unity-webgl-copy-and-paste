@@ -88,12 +88,12 @@ var WebGLCopyAndPaste = {
         window.addEventListener('cut', function (e) {
           e.preventDefault();
           sendStringCallback(g.cutCopyFunc, 'x');
-          event.clipboardData.setData('text/plain', g.clipboardStr);
+          e.clipboardData.setData('text/plain', g.clipboardStr);
         });
         window.addEventListener('copy', function (e) {
           e.preventDefault();
           sendStringCallback(g.cutCopyFunc, 'c');
-          event.clipboardData.setData('text/plain', g.clipboardStr);
+          e.clipboardData.setData('text/plain', g.clipboardStr);
         });
         window.addEventListener('paste', function (e) {
           const str = e.clipboardData.getData('text');
