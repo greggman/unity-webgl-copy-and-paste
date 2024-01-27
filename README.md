@@ -54,6 +54,11 @@ The plugin has been tested an confirmed working on:
 
 ## ChangeList
 
+* 0.3.0
+
+  * Added `Preserve` attribute to `WebGLCopyAndPasteAPI` class, and `AlwaysLinkAssembly` to the assembly,
+    so Unity doesn't strip the code if the plugin is moved to a package
+
 * 0.2.1
 
   * Fixed paste not working on some browsers

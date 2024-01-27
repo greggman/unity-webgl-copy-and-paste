@@ -34,7 +34,9 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Runtime.InteropServices;
+using UnityEngine.Scripting;
 
+[Preserve]
 public class WebGLCopyAndPasteAPI
 {
 
