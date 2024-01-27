@@ -8,11 +8,9 @@ Here is an attempt to add it back in. No promises that it's perfect 😅
 At the moment there is only support for [`InputField`](https://docs.unity3d.com/2019.1/Documentation/Manual/script-InputField.html) and
 [`TMPro.TMP_InputField`](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/api/TMPro.TMP_InputField.html)
 
-Example: https://greggman.github.io/unity-webgl-copy-and-paste/
-
 ## Instructions
 
-1. Download and add in [this unity package](https://github.com/greggman/unity-webgl-copy-and-paste/releases/latest) into your project.
+1. Download and add in [this unity package](https://github.com/Trisibo/unity-webgl-copy-and-paste/releases/latest) into your project.
 
 2. If you are using [`TMPro.TMP_InputField`](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/api/TMPro.TMP_InputField.html) then edit `Assets/WebGLCopyAndPaste/Scripts/WebGLCopyAndPaste.cs`
 and uncomment this line
@@ -26,6 +24,16 @@ and uncomment this line
 This might be better?
 
 https://github.com/kou-yeung/WebGLInput
+
+## Browsers tested
+
+The plugin has been tested an confirmed working on:
+
+* Edge 120.0.2210.61 (Chromium) on Windows 10, Unity 2022.3.10, 2021.3.25 and 2020.3.18.
+* Firefox 120.0.1 on Windows 10, Unity 2022.3.10, 2021.3.25 and 2020.3.18.
+* Safari 16.6 on macOS Ventura 13.6, Unity 2022.3.10.
+* Chrome 118.0.5993.70 on macOS Ventura 13.6, Unity 2022.3.10.
+* Firefox 120.0.1 on macOS Ventura 13.6, Unity 2022.3.10.
 
 ## Issues
 
@@ -45,6 +53,20 @@ https://github.com/kou-yeung/WebGLInput
      to make whatever parts of the page you want to prevent from being selected.
 
 ## ChangeList
+
+* 0.2.1
+
+  * Fixed paste not working on some browsers
+
+  * Fixed labels not being visually updated on some browsers
+
+  * Fixed potential null reference exception when `EventSystem.current` is null
+
+  * Substituted deprecated JavaScript `Window.event`
+
+* 0.2.0
+
+  * Fixes for Unity 2021.2
 
 * 0.1.0
   
